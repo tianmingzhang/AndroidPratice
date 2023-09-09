@@ -16,8 +16,8 @@ public interface  PlaceService {
     Call<PlaceResponse> getSearchPlaces(@Query("query") String queryA);
 
     @GET("/v2.6/${MyApplication.token}/{lat},{lng}/realtime")
-    Observable<RealtimeResponse> getRealtimeWeather(@Path("lat") String lat, @Path("lng") String lng);
+    Observable<RealtimeResponse> getRealtimeWeather(@Path("lat") double lat, @Path("lng") double lng);
 
     @GET("/v2.6/${MyApplication.token}/{lat},{lng}/daily?dailysteps=5")
-    Observable<DailyRespose> getDailyWeather(@Path("lat") String lat, @Path("lng") String lng);
+    Observable<DailyRespose> getDailyWeather(@Path("lat") double lat, @Path("lng") double lng);
 }
