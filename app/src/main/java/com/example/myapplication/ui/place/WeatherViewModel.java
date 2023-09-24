@@ -5,6 +5,7 @@ import android.location.Location;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.logic.model.LocationPlace;
 import com.example.myapplication.logic.model.Place;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 import retrofit2.http.Path;
 
-public class WeatherViewModel {
+public class WeatherViewModel extends ViewModel {
     MutableLiveData<LocationPlace> searchWeatherData = new MutableLiveData<LocationPlace>();
 
     public final LiveData<Weather> weather =
@@ -23,7 +24,7 @@ public class WeatherViewModel {
                 return WeatherSearchRepository.refreshWeather(locationPlace.getLat(),locationPlace.getLng());
             });
 
-    void refreshWeath(double lat, double lng) {
+    public void refreshWeath(double lat, double lng) {
         LocationPlace locationPlace = new LocationPlace();
         locationPlace.setLat(lat);
         locationPlace.setLng(lng);
