@@ -81,7 +81,7 @@ public class WeatherActivity extends AppCompatActivity {
             dateInfo = view.findViewById(R.id.dateInfo);
             dateInfo.setText(temperatureList.get(i).getDate());
             temperatureInfo = view.findViewById(R.id.temperatureInfo);
-            temperatureInfo.setText(temperatureList.get(i).getAvg());
+            temperatureInfo.setText(String.valueOf(temperatureList.get(i).getAvg()));
             forecastLayout.addView(view);
         }
 
