@@ -42,6 +42,8 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
         View postView = inflater.inflate(R.layout.city_item, parent, false);
 
         PlaceAdapter.ViewHolder viewHolder = new ViewHolder(postView);
+
+
         return viewHolder;
     }
 

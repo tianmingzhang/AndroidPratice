@@ -5,15 +5,20 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.view.LayoutInflater;
 
+import com.example.myapplication.logic.model.Temperature;
 import com.example.myapplication.logic.model.Weather;
 import com.example.myapplication.ui.place.PlaceViewModel;
 import com.example.myapplication.ui.place.WeatherViewModel;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class WeatherActivity extends AppCompatActivity {
@@ -24,6 +29,7 @@ public class WeatherActivity extends AppCompatActivity {
     TextView placeName,currentTemp,currentSky,currentAQI,dateInfo,temperatureInfo,ultravioletText;
     RelativeLayout nowLayout;
     LinearLayout forecastLayout;
+    ScrollView weatherLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +41,9 @@ public class WeatherActivity extends AppCompatActivity {
         currentAQI = findViewById(R.id.currentAQI);
         nowLayout = (RelativeLayout)findViewById(R.id.nowLayout);
         forecastLayout = (LinearLayout)findViewById(R.id.forecastLayout);
-        dateInfo = findViewById(R.id.dateInfo);
-        temperatureInfo = findViewById(R.id.temperatureInfo);
+
         ultravioletText = findViewById(R.id.ultravioletText);
+        weatherLayout = (ScrollView)findViewById(R.id.weatherLayout);
 
 
         double lng = getIntent().getDoubleExtra("location_lng",120.585294);
@@ -61,7 +67,25 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeatherInfo(Weather weather){
+        placeName.setText(place_name);
+        currentTemp.setText(weather.getRealtimeResponse().getResult().getRealtime().getTemperature()+"℃");
+        currentSky.setText(weather.getRealtimeResponse().getResult().getRealtime().getSkycon());
+        currentAQI.setText(weather.getRealtimeResponse().getResult().getRealtime().getAirQuality().getDescription().getChn());
+        ultravioletText.setText(weather.getRealtimeResponse().getResult().getRealtime().getLifeIndex().getUltraviolet().getDesc());
+        nowLayout.setBackgroundResource(R.drawable.bg_clear_day);
+        forecastLayout.removeAllViews();
 
+        ArrayList<Temperature> temperatureList = weather.getDailyRespose().getTemperature();
+        for(int i =0;i<temperatureList.size();i++) {
+            View view = LayoutInflater.from(this).inflate(R.layout.forecast_item,forecastLayout, false);
+            dateInfo = view.findViewById(R.id.dateInfo);
+            dateInfo.setText(temperatureList.get(i).getDate());
+            temperatureInfo = view.findViewById(R.id.temperatureInfo);
+            temperatureInfo.setText(temperatureList.get(i).getAvg());
+            forecastLayout.addView(view);
+        }
+
+        weatherLayout.setVisibility(View.VISIBLE);
     }
 
 }
