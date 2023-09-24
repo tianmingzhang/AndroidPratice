@@ -1,13 +1,13 @@
 package com.example.myapplication.logic.model;
 
 public class AirQuality {
-    private AirDescription  description;
+ private Description description;
 
-    public AirDescription getDescription() {
+    public Description getDescription() {
         return description;
     }
 
-    public void setDescription(AirDescription description) {
+    public void setDescription(Description description) {
         this.description = description;
     }
 }
