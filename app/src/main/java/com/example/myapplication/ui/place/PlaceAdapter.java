@@ -2,6 +2,7 @@ package com.example.myapplication.ui.place;
 
 
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
+import com.example.myapplication.WeatherActivity;
 import com.example.myapplication.logic.model.Place;
 
 import java.util.ArrayList;
@@ -43,6 +45,18 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
 
         PlaceAdapter.ViewHolder viewHolder = new ViewHolder(postView);
 
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Place place = placeArrayList.get(viewHolder.getAdapterPosition());
+                Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
+                intent.putExtra("location_lng",place.getLocation().getLng());
+                intent.putExtra("location_lat",place.getLocation().getLat());
+                intent.putExtra("place_name",place.getName());
+                fragment.startActivity(intent);
+                fragment.getActivity().finish();
+            }
+        });
 
         return viewHolder;
     }
