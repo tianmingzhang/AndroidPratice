@@ -12,12 +12,12 @@ import io.reactivex.Observable;
 
 
 public interface  PlaceService {
-    @GET("/v2/place?lang=zh_CN&token=${MyApplication.token}")
+    @GET("v2/place?lang=zh_CN&token=${MyApplication.token}")
     Call<PlaceResponse> getSearchPlaces(@Query("query") String queryA);
 
-    @GET("/v2.6/${MyApplication.token}/{lat},{lng}/realtime")
+    @GET("v2.6/SFtTHjnIUjRmg2fN/{lng},{lat}/realtime")
     Observable<RealtimeResponse> getRealtimeWeather(@Path("lat") double lat, @Path("lng") double lng);
 
-    @GET("/v2.6/${MyApplication.token}/{lat},{lng}/daily?dailysteps=5")
+    @GET("v2.6/SFtTHjnIUjRmg2fN/{lng},{lat}/daily?dailysteps=5")
     Observable<DailyRespose> getDailyWeather(@Path("lat") double lat, @Path("lng") double lng);
 }

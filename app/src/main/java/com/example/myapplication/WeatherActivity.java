@@ -75,7 +75,7 @@ public class WeatherActivity extends AppCompatActivity {
         nowLayout.setBackgroundResource(R.drawable.bg_clear_day);
         forecastLayout.removeAllViews();
 
-        ArrayList<Temperature> temperatureList = weather.getDailyRespose().getTemperature();
+        ArrayList<Temperature> temperatureList = weather.getDailyRespose().getResult().getDaily().getTemperature();
         for(int i =0;i<temperatureList.size();i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item,forecastLayout, false);
             dateInfo = view.findViewById(R.id.dateInfo);

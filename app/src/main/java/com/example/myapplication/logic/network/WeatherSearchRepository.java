@@ -143,7 +143,7 @@ public class WeatherSearchRepository {
                 DailyRespose t1 = (DailyRespose) dailyWeather;//o1得到的结果
                 RealtimeResponse t2 = (RealtimeResponse) realtimeWeather;//o2得到的结果
                 Weather f =null;//最终结果合并
-                if (t1.getStatus().equals("OK") && t2.getStatus().equals("OK")) {
+                if (t1.getStatus().toUpperCase().equals("OK") && t2.getStatus().toUpperCase().equals("OK")) {
                     f=new Weather();//最终结果合并
                     f.setDailyRespose(t1);
                     f.setRealtimeResponse(t2);
