@@ -6,7 +6,7 @@ import android.content.Context;
 public class MyApplication extends Application {
     private static Context context;
 
-    private static String token = new String("SFtTHjnIUjRmg2fN");
+    public static String token = new String("SFtTHjnIUjRmg2fN");
 
     @Override
     public void onCreate(){

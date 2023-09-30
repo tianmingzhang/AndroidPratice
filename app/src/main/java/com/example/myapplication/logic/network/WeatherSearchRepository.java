@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.myapplication.MyApplication;
 import com.example.myapplication.logic.model.DailyRespose;
 import com.example.myapplication.logic.model.Place;
 import com.example.myapplication.logic.model.PlaceResponse;
@@ -65,7 +66,7 @@ public class WeatherSearchRepository {
 
         Observable dailyWeather = Observable.create((ObservableOnSubscribe<DailyRespose>) emitter ->
                 ApiUtils.getPlaceService()
-                .getDailyWeather(lat,lng)
+                .getDailyWeather(MyApplication.token,lat,lng)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(new Function<Throwable, DailyRespose>() {
@@ -101,7 +102,7 @@ public class WeatherSearchRepository {
                 }));
         Observable realtimeWeather = Observable.create((ObservableOnSubscribe<RealtimeResponse>) emitter ->
                 ApiUtils.getPlaceService()
-                        .getRealtimeWeather(lat,lng)
+                        .getRealtimeWeather(MyApplication.token,lat,lng)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .onErrorReturn(new Function<Throwable, RealtimeResponse>() {
