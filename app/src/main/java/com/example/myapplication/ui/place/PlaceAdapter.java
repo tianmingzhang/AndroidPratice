@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MyApplication;
@@ -26,6 +27,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
     public  PlaceAdapter(Fragment fragment, ArrayList<Place> placeArrayList) {
         this.fragment = fragment;
         this.placeArrayList =placeArrayList;
+
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView quname;
@@ -44,10 +46,14 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
         View postView = inflater.inflate(R.layout.city_item, parent, false);
 
         PlaceAdapter.ViewHolder viewHolder = new ViewHolder(postView);
-
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FragmentActivity activity = fragment.requireActivity();
+                if (activity instanceof  WeatherActivity) {
+                    //((WeatherActivity) activity)
+
+                }
                 Place place = placeArrayList.get(viewHolder.getAdapterPosition());
                 Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
                 intent.putExtra("location_lng",place.getLocation().getLng());

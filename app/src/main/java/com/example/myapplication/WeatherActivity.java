@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -8,6 +11,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RelativeLayout;
@@ -32,6 +37,8 @@ public class WeatherActivity extends AppCompatActivity {
     RelativeLayout nowLayout;
     LinearLayout forecastLayout;
     ScrollView weatherLayout;
+    Button navBtn;
+    DrawerLayout drawerLayout;
 
     SwipeRefreshLayout swipeRefresh;
     @Override
@@ -51,6 +58,8 @@ public class WeatherActivity extends AppCompatActivity {
         ultravioletText = findViewById(R.id.ultravioletText);
         weatherLayout = (ScrollView)findViewById(R.id.weatherLayout);
         swipeRefresh = findViewById(R.id.swipeRefresh);
+        navBtn = findViewById(R.id.navBtn);
+        drawerLayout = findViewById(R.id.drawerLayout);
 
         double lng = getIntent().getDoubleExtra("location_lng",120.585294);
         double lat = getIntent().getDoubleExtra("location_lat",31.299758);
@@ -76,6 +85,36 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 refreshWeather(lat, lng);
+            }
+        });
+
+        navBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                InputMethodManager inputMethodManager =  (InputMethodManager)getSystemService(MyApplication.getContext().INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(drawerView.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
             }
         });
     }
