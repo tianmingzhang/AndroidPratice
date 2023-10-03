@@ -31,15 +31,14 @@ import java.util.Optional;
 public class WeatherActivity extends AppCompatActivity {
 
     String place_name;
-    WeatherViewModel weatherViewModel;
+    public WeatherViewModel weatherViewModel;
 
     TextView placeName,currentTemp,currentSky,currentAQI,dateInfo,temperatureInfo,ultravioletText;
     RelativeLayout nowLayout;
     LinearLayout forecastLayout;
     ScrollView weatherLayout;
     Button navBtn;
-    DrawerLayout drawerLayout;
-
+    public DrawerLayout drawerLayout;
     SwipeRefreshLayout swipeRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +59,14 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh = findViewById(R.id.swipeRefresh);
         navBtn = findViewById(R.id.navBtn);
         drawerLayout = findViewById(R.id.drawerLayout);
+        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
         double lng = getIntent().getDoubleExtra("location_lng",120.585294);
         double lat = getIntent().getDoubleExtra("location_lat",31.299758);
+
+
         place_name = Optional.ofNullable(getIntent().getStringExtra("place_name")).orElse("苏州");
 
-        weatherViewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
 
         weatherViewModel.weather.observe(this, new Observer<Weather>() {
             @Override
@@ -119,13 +120,17 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 
-    private void refreshWeather(double lat, double lng){
+    public void refreshWeather(double lat, double lng){
         weatherViewModel.refreshWeath(lat,lng);
         swipeRefresh.setRefreshing(true);
     }
 
     private void showWeatherInfo(Weather weather){
-        placeName.setText(place_name);
+        if (!weatherViewModel.placeName.isEmpty()) {
+            placeName.setText(weatherViewModel.placeName);
+        }else {
+            placeName.setText(place_name);
+        }
         currentTemp.setText(weather.getRealtimeResponse().getResult().getRealtime().getTemperature()+"℃");
         currentSky.setText(weather.getRealtimeResponse().getResult().getRealtime().getSkycon());
         currentAQI.setText(weather.getRealtimeResponse().getResult().getRealtime().getAirQuality().getDescription().getChn());

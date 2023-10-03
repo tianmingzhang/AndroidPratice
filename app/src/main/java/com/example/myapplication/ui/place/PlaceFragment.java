@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.place;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,13 +13,16 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.MyApplication;
 import com.example.myapplication.R;
+import com.example.myapplication.WeatherActivity;
 import com.example.myapplication.logic.model.Place;
 
 import org.apache.commons.lang3.StringUtils;
@@ -59,8 +63,18 @@ public class PlaceFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MyApplication.getContext());
         recyclerViewZtm.setLayoutManager(linearLayoutManager);
         placeViewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
-        placeAdapter = new PlaceAdapter(this,placeViewModel.placeArrayList);
+        placeAdapter = new PlaceAdapter(this,placeViewModel.placeArrayList,placeViewModel);
         recyclerViewZtm.setAdapter(placeAdapter);
+        FragmentActivity activity = this.requireActivity();
+        if (activity instanceof MainActivity && placeViewModel.existedPlace("saved_place")) {
+            Place place = placeViewModel.GetPlace("saved_place");
+            Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
+            intent.putExtra("location_lng",place.getLocation().getLng());
+            intent.putExtra("location_lat",place.getLocation().getLat());
+            intent.putExtra("place_name",place.getName());
+            this.startActivity(intent);
+            this.getActivity().finish();
+        }
         inputAdd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -84,7 +98,7 @@ public class PlaceFragment extends Fragment {
                 }
             }
         }) ;
-        placeViewModel.postalCode.observe(this, new Observer<ArrayList<Place>>() {
+        placeViewModel.postalCode.observe(this.getViewLifecycleOwner(), new Observer<ArrayList<Place>>() {
             @Override
             public void onChanged(ArrayList<Place> places) {
                 if (places != null) {

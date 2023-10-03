@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myapplication.MyApplication;
+import com.example.myapplication.logic.dao.PlaceDao;
 import com.example.myapplication.logic.model.DailyRespose;
 import com.example.myapplication.logic.model.Place;
 import com.example.myapplication.logic.model.PlaceResponse;
@@ -31,6 +32,7 @@ import retrofit2.Response;
 
 public class WeatherSearchRepository {
     ExecutorService executorService = Executors.newCachedThreadPool();
+    PlaceDao placeDao = new PlaceDao();
 
     public static MutableLiveData<ArrayList<Place>> searchPlaces(String queryA) {
         //构造需要暴露的数据结构
@@ -157,6 +159,18 @@ public class WeatherSearchRepository {
             liveDataWeather.setValue(f);
         });
         return liveDataWeather;
+    }
+
+    public void SavePlace(Place place,String keyWord) {
+        placeDao.SavePlace(place,keyWord);
+    }
+
+    public Place GetPlace(String keyWord) {
+        return placeDao.GetPlace(keyWord);
+    }
+
+    public boolean existedPlace(String keyWord) {
+        return placeDao.existedPlace(keyWord);
     }
 }
 

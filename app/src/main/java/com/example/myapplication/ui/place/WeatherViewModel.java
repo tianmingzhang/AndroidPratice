@@ -19,6 +19,8 @@ import retrofit2.http.Path;
 public class WeatherViewModel extends ViewModel {
     MutableLiveData<LocationPlace> searchWeatherData = new MutableLiveData<LocationPlace>();
 
+    public String placeName="";
+
     public final LiveData<Weather> weather =
             Transformations.switchMap(searchWeatherData, (locationPlace) -> {
                 return WeatherSearchRepository.refreshWeather(locationPlace.getLat(),locationPlace.getLng());

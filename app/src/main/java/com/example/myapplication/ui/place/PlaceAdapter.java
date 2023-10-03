@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MyApplication;
@@ -24,10 +25,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
 
     private  Fragment fragment;
     private ArrayList<Place> placeArrayList;
-    public  PlaceAdapter(Fragment fragment, ArrayList<Place> placeArrayList) {
+
+    private  PlaceViewModel placeViewModel;
+    public  PlaceAdapter(Fragment fragment, ArrayList<Place> placeArrayList,PlaceViewModel placeViewModel) {
         this.fragment = fragment;
         this.placeArrayList =placeArrayList;
-
+        this.placeViewModel = placeViewModel;
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView quname;
@@ -50,17 +53,23 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 FragmentActivity activity = fragment.requireActivity();
-                if (activity instanceof  WeatherActivity) {
-                    //((WeatherActivity) activity)
-
-                }
                 Place place = placeArrayList.get(viewHolder.getAdapterPosition());
-                Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
-                intent.putExtra("location_lng",place.getLocation().getLng());
-                intent.putExtra("location_lat",place.getLocation().getLat());
-                intent.putExtra("place_name",place.getName());
-                fragment.startActivity(intent);
-                fragment.getActivity().finish();
+
+                if (activity instanceof  WeatherActivity) {
+                    ((WeatherActivity) activity).drawerLayout.closeDrawers();
+                    ((WeatherActivity) activity).weatherViewModel.placeName =place.getName();
+                    //((WeatherActivity) activity).weatherViewModel.lat =place.getLocation().getLat();
+                    //((WeatherActivity) activity).weatherViewModel.lng = place.getLocation().getLng();
+                    ((WeatherActivity) activity).refreshWeather(place.getLocation().getLat(),place.getLocation().getLng());
+                } else {
+                    placeViewModel.SavePlace(place,"saved_place");
+                    Intent intent = new Intent(MyApplication.getContext(), WeatherActivity.class);
+                    intent.putExtra("location_lng",place.getLocation().getLng());
+                    intent.putExtra("location_lat",place.getLocation().getLat());
+                    intent.putExtra("place_name",place.getName());
+                    fragment.startActivity(intent);
+                    fragment.getActivity().finish();
+                }
             }
         });
 
